@@ -12,3 +12,8 @@ variable "ssh_pub_key_path" {
   type        = string
   description = "Path to your SSH public key"
 }
+
+variable "disk_size_gb" {
+  type    = number
+  default = 128
+}
