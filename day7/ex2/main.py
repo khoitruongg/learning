@@ -28,20 +28,9 @@ def create_partitioned_table(project_id, dataset_id, original_table_id, new_tabl
 
     # Define the SQL query to create a partitioned table from the original table
     # Define the SQL query to create a partitioned table from the original table
-    sql = f"""
-    CREATE TABLE `{project_id}.{dataset_id}.{new_table_id}`
-    PARTITION BY RANGE_BUCKET({partition_column}, GENERATE_ARRAY(0, 21, 1))
-    AS
-    (
-     SELECT * 
-     FROM `{project_id}.{dataset_id}.{original_table_id}`
-     WHERE {partition_column} IS NOT NULL
-    )
-    """
-
     # sql = f"""
     # CREATE TABLE `{project_id}.{dataset_id}.{new_table_id}`
-    # PARTITION BY DATE({partition_column})
+    # PARTITION BY RANGE_BUCKET({partition_column}, GENERATE_ARRAY(0, 21, 1))
     # AS
     # (
     #  SELECT * 
@@ -49,6 +38,17 @@ def create_partitioned_table(project_id, dataset_id, original_table_id, new_tabl
     #  WHERE {partition_column} IS NOT NULL
     # )
     # """
+
+    sql = f"""
+    CREATE TABLE `{project_id}.{dataset_id}.{new_table_id}`
+    PARTITION BY DATE({partition_column})
+    AS
+    (
+     SELECT * 
+     FROM `{project_id}.{dataset_id}.{original_table_id}`
+     WHERE {partition_column} IS NOT NULL
+    )
+    """
 
     # Run the query
     print('>>>> SQL: ', sql)
