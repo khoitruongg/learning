@@ -1,0 +1,27 @@
+id: fetch_and_save_csv
+namespace: example1.app
+
+tasks:
+  - id: fetchData
+    type: io.kestra.plugin.core.http.Request
+    uri: "http://35.226.174.46:8080/users"
+    method: GET
+    retry:
+      type: constant
+      interval: PT5S
+      maxAttempt: 3
+
+  - id: save_to_csv
+    type: io.kestra.plugin.scripts.python.Script
+    outputFiles:
+      - output.csv
+    script: |
+      import json
+      import csv
+
+      data = json.loads('''{{ outputs.fetchData.body }}''')
+
+      with open('output.csv', mode='w', newline='') as f:
+          writer = csv.DictWriter(f, fieldnames=data[0].keys())
+          writer.writeheader()
+          writer.writerows(data)

@@ -1,0 +1,42 @@
+id: schedule-fetch
+namespace: example1.app
+
+triggers:
+  - id: dailyTrigger
+    type: io.kestra.plugin.core.trigger.Schedule
+    cron: "0 2 * * *"
+    timezone: "Asia/Jakarta"
+
+tasks:
+  - id: try_api
+    type: io.kestra.plugin.core.flow.Sequential
+    tasks:
+      - id: fetchData
+        type: io.kestra.plugin.core.http.Request
+        uri: "http://35.226.174.46:8080/users"
+        method: GET
+        retry:
+          type: constant
+          interval: PT5S
+          maxAttempt: 2
+
+      - id: notifySuccess
+        type: io.kestra.plugin.core.http.Request
+        uri: "https://chat.googleapis.com/v1/spaces/AAAA0M8ixGE/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=gqrk5VIkUZjo-nE25TsCGYqQjNuG8ZNHFcSXBupb_f0"
+        method: POST
+        contentType: application/json
+        body: |
+          {
+            "text": "✅ API success at {{ now() }}"
+          }
+
+    errors:
+      - id: notifyFailure
+        type: io.kestra.plugin.core.http.Request
+        uri: "https://chat.googleapis.com/v1/spaces/AAAA0M8ixGE/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=gqrk5VIkUZjo-nE25TsCGYqQjNuG8ZNHFcSXBupb_f0"
+        method: POST
+        contentType: application/json
+        body: |
+          {
+            "text": "❌ API failed at {{ now() }}"
+          }

@@ -1,9 +1,6 @@
 from flask import Flask, request, redirect, render_template_string
 import psycopg2
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 app = Flask(__name__)
 
@@ -199,6 +196,17 @@ def edit_user(user_id):
             """
         else:
             return "User not found", 404
+
+@app.route("/users", methods=["GET"])
+def get_user():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id, name, email FROM users ORDER BY id DESC")
+    rows = cur.fetchall()
+    cur.close()
+    conn.close()
+    users = [{"id": r[0], "name": r[1], "email": r[2]} for r in rows]
+    return users
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=3000)

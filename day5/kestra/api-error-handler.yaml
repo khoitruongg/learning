@@ -1,0 +1,31 @@
+id: fetch_with_success_and_error
+namespace: example1.app
+
+triggers:
+  - id: dailyTrigger
+    type: io.kestra.plugin.core.trigger.Schedule
+    cron: "0 2 * * *"
+    timezone: "Asia/Jakarta"
+
+tasks:
+  - id: try_api
+    type: io.kestra.plugin.core.flow.Sequential
+    tasks:
+      - id: fetchData
+        type: io.kestra.plugin.core.http.Request
+        uri: "http://35.226.174.46:8080/users"
+        method: GET
+        retry:
+          type: constant
+          interval: PT5S
+          maxAttempt: 2
+
+      - id: successMessage
+        type: io.kestra.plugin.scripts.python.Script
+        script: |
+          print("✅ API request succeeded!")
+    errors:
+      - id: handleError
+        type: io.kestra.plugin.scripts.python.Script
+        script: |
+          print("❌ API request failed after retries.")
