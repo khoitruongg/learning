@@ -41,7 +41,7 @@ with open(output_file, mode='w', newline='') as csvfile:
 
             messages.append(data)
             count += 1
-            print(f"Received message #{count}: {data}")
+            print(f"---- Received message #{count}: {data}")
 
         # Export collected messages to CSV
         # Convert to DataFrame and save to CSV
