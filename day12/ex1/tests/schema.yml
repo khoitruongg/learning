@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: filter_user_with_first_name
+    description: "This model filters users with the first name condition"
+    columns:
+      - name: user_id
+        description: "Unique identifier for each user"
+        tests:
+          - not_null
+          - unique
+      - name: first_name
+        description: "User's first name"
+        tests:
+          - not_null
+
+  - name: calculate_age
+    description: "This model calculates the age of users based on date_of_birth"
+    columns:
+      - name: user_id
+        description: "Unique identifier for each user"
+        tests:
+          - not_null
+      - name: age
+        description: "User's age based on date_of_birth"
+        tests:
+          - not_null
