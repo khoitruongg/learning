@@ -1,0 +1,1 @@
+{"_invocation_id": "26c67859-ca6c-4ba6-a445-b8fc8579b1d1", "linked": {"0": {"name": "source.dbt_example.user_data.user", "type": "source", "succ": [1, 2]}, "1": {"name": "model.dbt_example.filter_user_with_first_name", "type": "model"}, "2": {"name": "model.dbt_example.calculate_age", "type": "model"}}}

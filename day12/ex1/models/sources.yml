@@ -1,0 +1,7 @@
+version: 2
+
+sources:
+  - name: user_data  # Give a name to your source group (can be any name)
+    schema: public  # Schema where the table resides (adjust as needed)
+    tables:
+      - name: user  # The name of the table in your database
